@@ -12,7 +12,17 @@ function App() {
 
   const weatherFetch = () =>{
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api_key}&units=metric&lang=ru`)
-      .then(response => response.json())
+      .then(response =>{
+        if (!response.ok){
+          if (response.status === 404){
+            throw new Error('404  Город не найден');
+          } else if(response.status >= 500){
+            throw new Error('Ошибка сервера');
+          } else{
+            throw new Error('Ошибка');
+          }
+        }
+        return response.json()})
       .then(data =>{
         setWeather(data);
       })
