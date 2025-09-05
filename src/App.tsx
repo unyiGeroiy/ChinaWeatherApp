@@ -50,6 +50,16 @@ function App() {
     weatherFetch();
   }
 
+  const getDayName = (count: number):string => {
+    const days = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+    const today = new Date();
+
+    const todayIndex = today.getDay();
+    const newDayIndex = (todayIndex + count) % 7;
+
+    return days[newDayIndex];
+  }
+
   useEffect(() => {
     weatherFetch();
   }, [])
@@ -100,7 +110,7 @@ function App() {
               </div>
               <div className='font-bold'>
                 <p className='text-white pr-2 pt-3'>16 c</p>
-                <p className='text-white pl-2 pt-3'>День недели</p>
+                <p className='text-white pt-3'>{getDayName(1)}</p>
               </div>
             </div>
             <div className='bg-green-700 shadow-md rounded-xs'>
@@ -109,7 +119,7 @@ function App() {
               </div>
               <div className='font-bold'>
                 <p className='text-white pr-2 pt-3'>16 c</p>
-                <p className='text-white pl-2 pt-3'>День недели</p>
+                <p className='text-white pt-3'>{getDayName(2)}</p>
               </div>
             </div>
             <div className='bg-green-700 shadow-md rounded-xs'>
@@ -118,7 +128,7 @@ function App() {
               </div>
               <div className='font-bold'>
                 <p className='text-white pr-2 pt-3'>16 c</p>
-                <p className='text-white pl-2 pt-3'>День недели</p>
+                <p className='text-white pt-3'>{getDayName(3)}</p>
               </div>
             </div>
             <div className='bg-green-700 shadow-md rounded-xs'>
@@ -127,7 +137,7 @@ function App() {
               </div>
               <div className='font-bold'>
                 <p className='text-white pr-2 pt-3'>16 c</p>
-                <p className='text-white pl-2 pt-3'>День недели</p>
+                <p className='text-white pt-3'>{getDayName(4)}</p>
               </div>
             </div>
             <div className='bg-green-700 shadow-md rounded-xs'>
@@ -136,7 +146,7 @@ function App() {
               </div>
               <div className='font-bold'>
                 <p className='text-white pr-2 pt-3'>16 c</p>
-                <p className='text-white pl-2 pt-3'>День недели</p>
+                <p className='text-white pt-3'>{getDayName(5)}</p>
               </div>
             </div>
             </>
