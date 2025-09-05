@@ -92,6 +92,8 @@ function App() {
       </div>
       </div>
       <div className='grid grid-cols-5 justify-center mt-10 min-h-45 min-w-220 gap-8'>
+      {forecast ?(
+        <>
             <div className='bg-green-700 shadow-md rounded-xs'>
               <div className='flex justify-center mt-8'>
                 <img src={icon} alt="" />
@@ -137,6 +139,11 @@ function App() {
                 <p className='text-white pl-2 pt-3'>День недели</p>
               </div>
             </div>
+            </>
+            ) : (
+              <p className='font-bold pl-2 text-[30px]'>Загрузка...</p>
+            )}
+      
       </div>
     </div>
     </>
