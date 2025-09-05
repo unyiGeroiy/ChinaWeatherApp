@@ -1,6 +1,5 @@
 import { useState, useEffect} from 'react'
 import './App.css'
-import icon from './assets/react.svg'
 
 
 function App() {
@@ -35,10 +34,23 @@ function App() {
   const forecastFetch = () => {
     fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${api_key}&units=metric&lang=ru`)
       .then(response => response.json())
-      .then(data => { setForecast(data)})
+      .then(data => {
+          const daily = [];
+
+          for (const item of data.list){
+            const date = new Date(item.dt*1000);
+            const hours = date.getUTCHours();
+
+            if (hours === 12){
+              daily.push(item);
+            }
+          }
+          setForecast(daily.slice(0, 5));
+      })
       .catch(error => {
         console.error(error);
       });
+      
   };
 
   const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,6 +60,7 @@ function App() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     weatherFetch();
+    forecastFetch();
   }
 
   const getDayName = (count: number):string => {
@@ -62,6 +75,7 @@ function App() {
 
   useEffect(() => {
     weatherFetch();
+    forecastFetch();
   }, [])
 
   const getWeatherIconUrl = (iconId: string) => {
@@ -103,53 +117,20 @@ function App() {
       </div>
       <div className='grid grid-cols-5 justify-center mt-10 min-h-45 min-w-220 gap-8'>
       {forecast ?(
-        <>
-            <div className='bg-green-700 shadow-md rounded-xs'>
+        forecast.map((day, index) =>(
+        
+            <div className='bg-green-700 shadow-md rounded-xs' key={index}>
               <div className='flex justify-center mt-8'>
-                <img src={icon} alt="" />
+                <img src={`https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`} alt="" />
               </div>
-              <div className='font-bold'>
-                <p className='text-white pr-2 pt-3'>16 c</p>
-                <p className='text-white pt-3'>{getDayName(1)}</p>
+              <div className='font-bold' key={index}>
+                <p className='text-white pr-2 pt-3'>{Math.round(day.main.temp)}°C</p>
+                <p className='text-white pt-3'>{getDayName(index+1)}</p>
               </div>
             </div>
-            <div className='bg-green-700 shadow-md rounded-xs'>
-              <div className='flex justify-center mt-8'>
-                <img src={icon} alt="" />
-              </div>
-              <div className='font-bold'>
-                <p className='text-white pr-2 pt-3'>16 c</p>
-                <p className='text-white pt-3'>{getDayName(2)}</p>
-              </div>
-            </div>
-            <div className='bg-green-700 shadow-md rounded-xs'>
-              <div className='flex justify-center mt-8'>
-                <img src={icon} alt="" />
-              </div>
-              <div className='font-bold'>
-                <p className='text-white pr-2 pt-3'>16 c</p>
-                <p className='text-white pt-3'>{getDayName(3)}</p>
-              </div>
-            </div>
-            <div className='bg-green-700 shadow-md rounded-xs'>
-              <div className='flex justify-center mt-8'>
-                <img src={icon} alt="" />
-              </div>
-              <div className='font-bold'>
-                <p className='text-white pr-2 pt-3'>16 c</p>
-                <p className='text-white pt-3'>{getDayName(4)}</p>
-              </div>
-            </div>
-            <div className='bg-green-700 shadow-md rounded-xs'>
-              <div className='flex justify-center mt-8'>
-                <img src={icon} alt="" />
-              </div>
-              <div className='font-bold'>
-                <p className='text-white pr-2 pt-3'>16 c</p>
-                <p className='text-white pt-3'>{getDayName(5)}</p>
-              </div>
-            </div>
-            </>
+           
+            
+            ))
             ) : (
               <p className='font-bold pl-2 text-[30px]'>Загрузка...</p>
             )}
